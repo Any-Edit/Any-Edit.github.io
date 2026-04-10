@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ANYEDIT: A Unified Framework for Speech and Singing Voice Editing</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+    :root {
+      --primary: #0366d6;
+      --bg-color: #f8f9fa;
+      --text-main: #333;
+      --text-muted: #666;
+      --del-color: #d93025;
+      --del-bg: #fce8e6;
+      --ins-color: #2e1880;
+      --ins-bg: #e6f4ea;
+      --sub-color: #b00055;
+      --sub-bg: #fef0db;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      line-height: 1.7;
+      color: var(--text-main);
+      background-color: var(--bg-color);
+      margin: 0;
+      padding: 0;
+      scroll-behavior: smooth;
+    }
+    .layout-wrapper {
+      display: flex;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    .sidebar {
+      width: 200px;
+      flex-shrink: 0;
+      position: sticky;
+      top: 40px;
+      height: max-content;
+      padding-right: 20px;
+      border-right: 2px solid #eaeaea;
+      display: none;
+    }
+    @media (min-width: 1024px) {
+      .sidebar { display: block; }
+    }
+    .sidebar ul { list-style: none; padding: 0; margin: 0; }
+    .sidebar li { margin-bottom: 8px; }
+    .sidebar a {
+      text-decoration: none;
+      color: var(--text-muted);
+      font-size: 0.9em;
+      transition: all 0.3s;
+      display: block;
+      padding: 8px 10px;
+      border-radius: 6px;
+      line-height: 1.3;
+    }
+    .sidebar a:hover { background-color: #eef2f5; color: var(--primary); }
+    .sidebar a.active {
+      font-weight: 700;
+      color: var(--primary);
+      background-color: #eaf1f8;
+      border-left: 4px solid var(--primary);
+    }
+    .main-content {
+      flex-grow: 1;
+      padding-left: 40px;
+      max-width: 1000px;
+    }
+    @media (max-width: 1024px) {
+      .main-content { padding-left: 0; }
+    }
+    header { text-align: center; margin-bottom: 50px; }
+    h1 { font-size: 2.2em; color: #1a1a1a; margin-bottom: 15px; }
+    .authors { font-size: 1.1em; color: #444; margin-bottom: 10px; }
+    .authors sup { color: var(--primary); }
+    .affiliations { font-size: 0.9em; color: var(--text-muted); margin-bottom: 25px; }
+    .badges a { display: inline-block; margin: 0 4px; text-decoration: none; }
+    .badges img { height: 28px; vertical-align: middle; }
+    section { margin-bottom: 60px; scroll-margin-top: 40px; }
+    h2 {
+      border-bottom: 2px solid #eaeaea;
+      padding-bottom: 8px;
+      margin-bottom: 20px;
+      color: #2c3e50;
+      display: flex;
+      align-items: center;
+    }
+    .abstract-text {
+      text-align: justify;
+      background: #fff;
+      padding: 25px;
+      border-radius: 12px;
+      border-left: 5px solid var(--primary);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+      font-size: 0.95em;
+    }
+    .figure-img {
+      width: 100%;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      margin-bottom: 10px;
+    }
+    .figure-caption { text-align: center; font-size: 0.9em; color: #777; margin-bottom: 20px; }
+    .demo-card {
+      background: #fff;
+      border: 1px solid #eaeaea;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 30px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+      transition: transform 0.3s ease;
+    }
+    .demo-card:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.06); }
+    .tag { display: inline-flex; gap: 6px; flex-wrap: wrap; margin-bottom: 15px; }
+    .tag-chip {
+      display: inline-block;
+      font-size: 0.75em;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-weight: 600;
+    }
+    .tag-chip.lang { background: #2c3e50; color: white; }
+    .tag-chip.condition { background: #d93025; color: white; }
+    .tag-chip.modality { background: #0366d6; color: white; }
+    .tag-chip.operation { background: #e8eaed; color: #333; border: 1px solid #dadce0; }
+    .tag-chip.bg-clean { background: #e6f4ea; color: #137333; }
+    .tag-chip.bg-noisy { background: #fef0db; color: #b06000; }
+    .text-context { margin-bottom: 20px; font-size: 0.95em; background: #fcfcfc; padding: 15px; border-radius: 8px; border: 1px solid #f0f0f0; }
+    .text-context del { color: var(--del-color); background: var(--del-bg); padding: 2px 5px; border-radius: 4px; text-decoration: line-through; }
+    .text-context ins { color: var(--ins-color); background: var(--ins-bg); padding: 2px 5px; border-radius: 4px; text-decoration: none; font-weight: bold; }
+    .text-context mark { color: var(--sub-color); background: var(--sub-bg); padding: 2px 5px; border-radius: 4px; text-decoration: none; font-weight: bold; }
+    .audio-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+    }
+    .audio-item {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 10px;
+      border: 1px solid #eee;
+      text-align: center;
+      position: relative;
+    }
+    .audio-item.ours { border: 2px solid var(--primary); background: #f0f7ff; }
+    .audio-item h4 { margin: 0 0 10px 0; font-size: 0.9em; color: #444; }
+    .audio-item audio { width: 100%; height: 40px; outline: none; }
+    .audio-item .note-tooltip {
+      display: none;
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: #333;
+      color: #fff;
+      font-size: 0.78em;
+      padding: 8px 12px;
+      border-radius: 8px;
+      white-space: normal;
+      width: max-content;
+      max-width: 260px;
+      line-height: 1.5;
+      z-index: 10;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+      pointer-events: none;
+    }
+    .audio-item .note-tooltip::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 6px solid transparent;
+      border-top-color: #333;
+    }
+    .audio-item:hover .note-tooltip { display: block; }
+    .song-info {
+      font-size: 0.82em;
+      color: #666;
+      margin-bottom: 12px;
+      padding: 6px 12px;
+      background: #f0f0f0;
+      border-radius: 6px;
+      display: inline-block;
+    }
+    .song-info .artist { font-weight: 600; color: #444; }
+    .song-info .venue { color: #999; font-style: italic; }
+    .fade-in {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+<div class="layout-wrapper">
+  <nav class="sidebar">
+    <ul id="nav-menu">
+      <li><a href="#header">Home</a></li>
+      <li><a href="#abstract">Abstract</a></li>
+      <li><a href="#methodology">Methodology</a></li>
+      <li><a href="#benchmark">ANYEDITBENCH</a></li>
+      <li><a href="#speech-demo">🎧 Real-World Speech</a></li>
+      <li><a href="#singing-demo">🎧 Real-World Singing</a></li>
+    </ul>
+  </nav>
+  <main class="main-content">
+    <header id="header" class="fade-in">
+      <h1>ANYEDIT: A Unified Framework for Speech and Singing Voice Editing in Real-World Acoustic Environments</h1>
+      <div class="authors">
+        Yunjia Zhang<sup>1</sup>, Junan Zhang<sup>1</sup>, Jing Yang<sup>2</sup>, Xueyao Zhang<sup>1</sup>, Fan Fan<sup>2</sup>, Zhizheng Wu<sup>1</sup>
+      </div>
+      <div class="affiliations">
+        <sup>1</sup> The Chinese University of Hong Kong, Shenzhen<br>
+        <sup>2</sup> Central Media Technology Institute, Huawei
+      </div>
+      <div class="badges">
+        <a href="#"><img src="https://img.shields.io/badge/Paper-ArXiv-b31b1b?style=for-the-badge&logo=arxiv" alt="Paper"></a>
+        <a href="#"><img src="https://img.shields.io/badge/Dataset-HuggingFace-ffcc00?style=for-the-badge&logo=huggingface" alt="HuggingFace"></a>
+      </div>
+    </header>
+    <section id="abstract" class="fade-in">
+      <h2>Abstract</h2>
+      <div class="abstract-text">
+        We present ANYEDIT, a unified framework for speech and singing voice editing in real-world acoustic environments. Recent unified generative models already achieve strong speech and singing generation in clean conditions, but real-world vocal editing remains challenging because the model must revise content while simultaneously preserving speaker identity, prosody, and the surrounding acoustic scene. A straightforward solution is to directly model noisy edited audio end to end, yet this entangles semantic editing with environmental acoustics and can weaken the core vocal generation capability. We therefore adopt a two-stage design that preserves clean-domain editing ability while deferring acoustic rendering to a separate stage.
+      </div>
+    </section>
+    <section id="methodology" class="fade-in">
+      <h2>Methodology</h2>
+      <img src="src/img/Architecture.pdf" alt="Architecture" class="figure-img" onerror="this.src='https://via.placeholder.com/900x400?text=Put+Architecture+Figure+in+src%2Fimg'">
+      <div class="figure-caption">Figure 1: Overall architecture of the ANYEDIT framework.</div>
+      <p>The AR model operates in a clean semantic space to predict prosody and content tokens, supported by a noise-robust teacher-student tokenizer. A flow-matching acoustic model then renders mel-spectrograms conditioned on source acoustic context.</p>
+    </section>
+    <section id="benchmark" class="fade-in">
+      <h2>ANYEDITBENCH</h2>
+      <p>ANYEDITBENCH covers 12 subsets (3 splits × 2 modalities × 2 languages), totaling 600 evaluation items:</p>
+      <ul>
+        <li><strong>Clean:</strong> single-span and multi-span edits on clean recordings.</li>
+        <li><strong>Simulated:</strong> diverse noise and reverberation settings.</li>
+        <li><strong>Real-world:</strong> in-the-wild speech and singing recordings.</li>
+      </ul>
+    </section>
+    <section id="speech-demo" class="fade-in">
+      <h2>🎧 Real-World Speech Editing</h2>
+      <p>Orange highlight indicates edited words. Hover baseline cards to view listening notes.</p>
+      <div id="speech-container"></div>
+    </section>
+    <section id="singing-demo" class="fade-in">
+      <h2>🎧 Real-World Singing Voice Editing</h2>
+      <p>Orange highlight indicates edited words. Red tags indicate acoustic conditions.</p>
+      <div id="singing-container"></div>
+    </section>
+  </main>
+</div>
+<script>
+  const sections = document.querySelectorAll('section[id], header[id]');
+  const navLi = document.querySelectorAll('.sidebar ul li a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(section => {
+      if (scrollY >= section.offsetTop - 150) current = section.getAttribute('id');
+    });
+    navLi.forEach(a => {
+      a.classList.remove('active');
+      if (a.getAttribute('href').includes(current)) a.classList.add('active');
+    });
+  });
+
+  const faders = document.querySelectorAll('.fade-in');
+  const appearOnScroll = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+  faders.forEach(fader => appearOnScroll.observe(fader));
+
+  function createDemoCard(item) {
+    const card = document.createElement('div');
+    card.className = 'demo-card';
+    const parts = item.operation.split(' · ');
+    let tagHtml = '<div class="tag">';
+    parts.forEach(p => {
+      let cls = 'tag-chip ';
+      if (p === 'EN' || p === 'ZH') cls += 'lang';
+      else if (p.startsWith('SNR=') || p.startsWith('RT60=') || (p.includes('SNR=') && p.includes('RT60='))) cls += 'condition';
+      else if (p === 'Speech' || p === 'Singing') cls += 'modality';
+      else if (p === '🔇 Clean') cls += 'bg-clean';
+      else if (p === '🔊 Noisy') cls += 'bg-noisy';
+      else cls += 'operation';
+      tagHtml += `<span class="${cls}">${p}</span>`;
+    });
+    tagHtml += '</div>';
+
+    const textContext = `
+      <div class="text-context">
+        <div style="margin-bottom:8px;"><strong>Original:</strong> ${item.originalText}</div>
+        <div><strong>Target:</strong> ${item.targetText}</div>
+      </div>
+    `;
+
+    let songInfoHtml = '';
+    if (item.songInfo) {
+      songInfoHtml = `<div class="song-info">🎵 <span class="artist">${item.songInfo.artist}</span> — ${item.songInfo.song}${item.songInfo.venue ? ' <span class="venue">(' + item.songInfo.venue + ')</span>' : ''}</div>`;
+    }
+
+    let baselinesHtml = '';
+    if (Array.isArray(item.baselines)) {
+      item.baselines.forEach(b => {
+        const noteHtml = b.note ? `<div class="note-tooltip">⚠️ ${b.note}</div>` : '';
+        baselinesHtml += `<div class="audio-item">${noteHtml}<h4>Baseline (${b.name})</h4><audio controls src="${b.path}"></audio></div>`;
+      });
+    }
+
+    const audioGrid = `
+      ${songInfoHtml}
+      <div class="audio-grid">
+        <div class="audio-item"><h4>Original Audio</h4><audio controls src="${item.audioOri}"></audio></div>
+        <div class="audio-item ours"><h4><strong>ANYEDIT (Ours)</strong></h4><audio controls src="${item.audioOurs}"></audio></div>
+        ${baselinesHtml}
+      </div>
+    `;
+    card.innerHTML = tagHtml + textContext + audioGrid;
+    return card;
+  }
+
+  function renderDemos(data) {
+    const renderSection = (arr, id) => {
+      const container = document.getElementById(id);
+      if (Array.isArray(arr) && arr.length > 0) arr.forEach(item => container.appendChild(createDemoCard(item)));
+      else container.innerHTML = '<p style="color:#999; font-style:italic;">Demos are coming soon...</p>';
+    };
+    renderSection(data.speechDemos, 'speech-container');
+    renderSection(data.singingDemos, 'singing-container');
+  }
+
+  fetch('src/data.json')
+    .then(r => r.json())
+    .then(renderDemos)
+    .catch(() => {
+      document.getElementById('speech-container').innerHTML = '<p style="color:#d93025;">Failed to load demo data.</p>';
+      document.getElementById('singing-container').innerHTML = '<p style="color:#d93025;">Failed to load demo data.</p>';
+    });
+</script>
+</body>
+</html>
