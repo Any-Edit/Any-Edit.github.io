@@ -1,0 +1,215 @@
+{
+  "speechDemos": [
+    {
+      "operation": "EN · 🔇 Clean · Substitution",
+      "originalText": "Everybody welcome. Thank you all  for <mark>coming out to</mark> ",
+      "targetText": "Everybody welcome. Thank you all  for <mark>showing up for</mark> ",
+      "audioOri": "src/audio/speech/1_ori.wav",
+      "audioOurs": "src/audio/speech/1_ours.wav",
+      "baselines": [
+        {
+          "name": "SSR-Speech",
+          "path": "src/audio/speech/1_ssr_speech.wav",
+          "note": "Long blank segment before vocals begin; sentence not fully completed"
+        },
+        {
+          "name": "VoiceCraft",
+          "path": "src/audio/speech/1_voicecraft.wav",
+          "note": "Sentence not fully completed"
+        },
+        {
+          "name": "Step-EditX",
+          "path": "src/audio/speech/1_step_editx.wav",
+          "note": "Ignores the long silent background segment"
+        },
+        {
+          "name": "Vevo2",
+          "path": "src/audio/speech/1_vevo2.wav",
+          "note": "Background sound changed in unedited parts"
+        }
+      ]
+    },
+    {
+      "operation": "EN · 🔊 Noisy · Substitution",
+      "originalText": "Greetings and welcome to the discussion on <mark>Web Browsers and Web Servers.</mark>",
+      "targetText": "Greetings and welcome to the discussion on <mark>Cloud Storage and Data Centers.</mark>",
+      "audioOri": "src/audio/speech/2_ori.wav",
+      "audioOurs": "src/audio/speech/2_ours.wav",
+      "baselines": [
+        {
+          "name": "SSR-Speech",
+          "path": "src/audio/speech/2_ssr_speech.wav",
+          "note": "Unedited parts do not preserve original prosody"
+        },
+        {
+          "name": "VoiceCraft",
+          "path": "src/audio/speech/2_voicecraft.wav",
+          "note": "Stress on 'data' in the edited part is inconsistent with the original"
+        },
+        {
+          "name": "Step-EditX",
+          "path": "src/audio/speech/2_step_editx.wav",
+          "note": "Incorrect prosody"
+        },
+        {
+          "name": "Vevo2",
+          "path": "src/audio/speech/2_vevo2.wav"
+        }
+      ]
+    },
+    {
+      "operation": "ZH · 🔊 Noisy · Substitution",
+      "originalText": "第45个<mark>技巧</mark>",
+      "targetText": "第45个<mark>问题</mark>",
+      "audioOri": "src/audio/speech/3_ori.wav",
+      "audioOurs": "src/audio/speech/3_ours.wav",
+      "baselines": [
+        {
+          "name": "SSR-Speech",
+          "path": "src/audio/speech/3_ssr_speech.wav",
+          "note": "Unedited parts do not maintain original semantics"
+        },
+        {
+          "name": "Step-EditX",
+          "path": "src/audio/speech/3_step_editx.wav"
+        },
+        {
+          "name": "Vevo2",
+          "path": "src/audio/speech/3_vevo2.wav",
+          "note": "Numbers are read incorrectly"
+        }
+      ]
+    },
+    {
+      "operation": "ZH · 🔇 Clean · Multi-Span Substitution",
+      "originalText": "您才能在第一时间<mark>收</mark>到<mark>通知</mark>",
+      "targetText": "您才能在第一时间<mark>看</mark>到<mark>更新</mark>",
+      "audioOri": "src/audio/speech/4_ori.wav",
+      "audioOurs": "src/audio/speech/4_ours.wav",
+      "baselines": [
+        {
+          "name": "SSR-Speech",
+          "path": "src/audio/speech/4_ssr_speech.wav",
+          "note": "Edited parts do not maintain original speaking style"
+        },
+        {
+          "name": "Step-EditX",
+          "path": "src/audio/speech/4_step_editx.wav",
+          "note": "Edited parts do not maintain original speaking style"
+        },
+        {
+          "name": "Vevo2",
+          "path": "src/audio/speech/4_vevo2.wav"
+        }
+      ]
+    }
+  ],
+  "singingDemos": [
+    {
+      "operation": "EN · 🔊 Noisy · Substitution",
+      "originalText": "You don't have to change <mark>a</mark> thing.",
+      "targetText": "You don't have to change <mark>one</mark> thing.",
+      "audioOri": "src/audio/singing/1_ori.wav",
+      "audioOurs": "src/audio/singing/1_ours.wav",
+      "baselines": [
+        {
+          "name": "Vevo2",
+          "path": "src/audio/singing/1_vevo2.wav",
+          "note": "Melody in the edited part is not preserved"
+        }
+      ],
+      "songInfo": {
+        "artist": "林伟轩 (Lin Weixuan)",
+        "song": "Nothing's Gonna Change My Love for You",
+        "venue": "Piano Room"
+      }
+    },
+    {
+      "operation": "EN · SNR=0dB + RT60=1.0s · Substitution",
+      "originalText": "To carry more than <mark>just</mark> my secrets to carry love",
+      "targetText": "To carry more than <mark>all</mark> my secrets to carry love",
+      "audioOri": "src/audio/extreme/7_ori.wav",
+      "audioOurs": "src/audio/extreme/7_ours.wav",
+      "baselines": [
+        {
+          "name": "Vevo2",
+          "path": "src/audio/extreme/7_vevo2.wav",
+          "note": "Timbre changes in the second half of the sentence"
+        }
+      ]
+    },
+    {
+      "operation": "ZH · 🔊 Noisy · Substitution",
+      "originalText": "你<mark>到底</mark>拿走了什么",
+      "targetText": "你<mark>究竟</mark>拿走了什么",
+      "audioOri": "src/audio/singing/4_ori.wav",
+      "audioOurs": "src/audio/singing/4_ours.wav",
+      "baselines": [
+        {
+          "name": "Vevo2",
+          "path": "src/audio/singing/4_vevo2.wav",
+          "note": "Background environment not preserved"
+        },
+        {
+          "name": "SoulxSinger",
+          "path": "src/audio/singing/4_soulxsinger.wav",
+          "note": "Did not sing the lyrics"
+        }
+      ],
+      "songInfo": {
+        "artist": "郭采琴 (Guo Caiqin)",
+        "song": "拿走了什么",
+        "venue": "Piano Room"
+      }
+    },
+    {
+      "operation": "ZH · 🔊 Noisy · Substitution",
+      "originalText": "在最好的年纪遇到你才算没有辜负自己<mark>终于</mark>等到你",
+      "targetText": "在最好的年纪遇到你才算没有辜负自己<mark>总算</mark>等到你",
+      "audioOri": "src/audio/singing/5_ori.wav",
+      "audioOurs": "src/audio/singing/5_ours.wav",
+      "baselines": [
+        {
+          "name": "Vevo2",
+          "path": "src/audio/singing/5_vevo2.wav",
+          "note": "Background environment not preserved"
+        },
+        {
+          "name": "SoulxSinger",
+          "path": "src/audio/singing/5_soulxsinger.wav",
+          "note": "Did not sing the lyrics"
+        }
+      ],
+      "songInfo": {
+        "artist": "张靓颖 (Jane Zhang)",
+        "song": "终于等到你",
+        "venue": "Concert"
+      }
+    },
+    {
+      "operation": "ZH · 🔊 Noisy · Substitution",
+      "originalText": "我不唱生死离<mark>结</mark>的情歌",
+      "targetText": "我不唱生死离<mark>别</mark>的情歌",
+      "audioOri": "src/audio/singing/6_ori.wav",
+      "audioOurs": "src/audio/singing/6_ours.wav",
+      "baselines": [
+        {
+          "name": "Vevo2",
+          "path": "src/audio/singing/6_vevo2.wav",
+          "note": "Background environment not preserved"
+        },
+        {
+          "name": "SoulxSinger",
+          "path": "src/audio/singing/6_soulxsinger.wav",
+          "note": "Lyrics are incorrect"
+        }
+      ],
+      "songInfo": {
+        "artist": "陈奕迅 (Eason Chan)",
+        "song": "孤独患者",
+        "venue": "Concert"
+      }
+    }
+  ],
+  "additionalDemos": []
+}
