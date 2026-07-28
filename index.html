@@ -207,6 +207,11 @@
       <li><a href="#benchmark">ANYEDITBENCH</a></li>
       <li><a href="#speech-demo">🎧 Real-World Speech</a></li>
       <li><a href="#singing-demo">🎧 Real-World Singing</a></li>
+      <li><a href="#more-capabilities">🎧 More Capabilities</a></li>
+      <li style="padding-left:14px;"><a href="#more-varying-length">· Varying Length Editing</a></li>
+      <li style="padding-left:14px;"><a href="#more-speech2sing">· Speech to Sing</a></li>
+      <li style="padding-left:14px;"><a href="#more-vc">· Voice Conversion (VC)</a></li>
+      <li style="padding-left:14px;"><a href="#more-svc">· Singing Voice Conversion (SVC)</a></li>
     </ul>
   </nav>
   <main class="main-content">
@@ -214,10 +219,13 @@
       <h1>ANYEDIT: A Unified Framework for Speech and Singing Voice Editing with Real-World Acoustic Consistency</h1>
       <div class="authors">
         Anonymous Authors
+      </div>
+      <!-- temporarily hidden: ArXiv / HuggingFace badges
       <div class="badges">
         <a href="#"><img src="https://img.shields.io/badge/Paper-ArXiv-b31b1b?style=for-the-badge&logo=arxiv" alt="Paper"></a>
         <a href="#"><img src="https://img.shields.io/badge/Dataset-HuggingFace-ffcc00?style=for-the-badge&logo=huggingface" alt="HuggingFace"></a>
       </div>
+      -->
     </header>
     <section id="abstract" class="fade-in">
       <h2>Abstract</h2>
@@ -227,7 +235,7 @@
     </section>
     <section id="methodology" class="fade-in">
       <h2>Methodology</h2>
-      <img src="src/img/Architecture.pdf" alt="Architecture" class="figure-img" onerror="this.src='https://via.placeholder.com/900x400?text=Put+Architecture+Figure+in+src%2Fimg'">
+      <img src="src/img/Architecture.png" alt="Architecture" class="figure-img" onerror="this.onerror=null; this.src='src/img/Architecture.pdf'">
       <div class="figure-caption">Figure 1: Overall architecture of the ANYEDIT framework.</div>
       <p>The AR model operates in a clean semantic space to predict prosody and content tokens, supported by a noise-robust teacher-student tokenizer. A flow-matching acoustic model then renders mel-spectrograms conditioned on source acoustic context.</p>
     </section>
@@ -249,6 +257,26 @@
       <h2>🎧 Real-World Singing Voice Editing</h2>
       <p>Orange highlight indicates edited words. Red tags indicate acoustic conditions.</p>
       <div id="singing-container"></div>
+    </section>
+    <section id="more-capabilities" class="fade-in">
+      <h2>🎧 More Capabilities</h2>
+      <p>Extra abilities beyond standard speech/singing editing. Orange highlight marks edited spans. Hover baseline cards for listening notes. For VC/SVC cards, the first reference is prosody/content and the second is target timbre.</p>
+
+      <h3 id="more-varying-length" style="margin-top:28px;">Varying Length Editing</h3>
+      <p>Original and target differ substantially in text length and/or audio duration. Hover baselines for failure modes.</p>
+      <div id="more-varying-length-container"></div>
+
+      <h3 id="more-speech2sing" style="margin-top:28px;">Speech to Sing</h3>
+      <p>Transfer a speech speaker’s timbre onto singing content/prosody.</p>
+      <div id="more-speech2sing-container"></div>
+
+      <h3 id="more-vc" style="margin-top:28px;">Voice Conversion (VC)</h3>
+      <p>Keep linguistic content/prosody while converting to a target speaker timbre.</p>
+      <div id="more-vc-container"></div>
+
+      <h3 id="more-svc" style="margin-top:28px;">Singing Voice Conversion (SVC)</h3>
+      <p>Keep singing content/prosody while converting to a target singer timbre.</p>
+      <div id="more-svc-container"></div>
     </section>
   </main>
 </div>
@@ -293,12 +321,27 @@
     });
     tagHtml += '</div>';
 
-    const textContext = `
+    let textContext;
+    const op = item.operation || '';
+    const mergeOT = (op.includes(' · VC ·') || op.includes(' · SVC ·') || op.includes('Speech to Sing'))
+      && item.originalText === item.targetText;
+    if (mergeOT) {
+      textContext = `
+      <div class="text-context">
+        <div><strong>Original = Target:</strong> ${item.originalText}</div>
+      </div>
+    `;
+    } else {
+      textContext = `
       <div class="text-context">
         <div style="margin-bottom:8px;"><strong>Original:</strong> ${item.originalText}</div>
         <div><strong>Target:</strong> ${item.targetText}</div>
       </div>
     `;
+    }
+    if (item.sectionNote) {
+      textContext += `<div class="song-info" style="margin-top:6px;">${item.sectionNote}</div>`;
+    }
 
     let songInfoHtml = '';
     if (item.songInfo) {
@@ -313,11 +356,19 @@
       });
     }
 
+    const oriLabel = item.audioOriLabel || 'Original Audio';
+    const timbreLabel = item.audioTimbreLabel || 'Timbre Reference';
+    const oursLabel = item.oursLabel || 'ANYEDIT (Ours)';
+    const timbreHtml = item.audioTimbre
+      ? `<div class="audio-item"><h4>${timbreLabel}</h4><audio controls src="${item.audioTimbre}"></audio></div>`
+      : '';
+
     const audioGrid = `
       ${songInfoHtml}
       <div class="audio-grid">
-        <div class="audio-item"><h4>Original Audio</h4><audio controls src="${item.audioOri}"></audio></div>
-        <div class="audio-item ours"><h4><strong>ANYEDIT (Ours)</strong></h4><audio controls src="${item.audioOurs}"></audio></div>
+        <div class="audio-item"><h4>${oriLabel}</h4><audio controls src="${item.audioOri}"></audio></div>
+        ${timbreHtml}
+        <div class="audio-item ours"><h4><strong>${oursLabel}</strong></h4><audio controls src="${item.audioOurs}"></audio></div>
         ${baselinesHtml}
       </div>
     `;
@@ -328,11 +379,21 @@
   function renderDemos(data) {
     const renderSection = (arr, id) => {
       const container = document.getElementById(id);
+      if (!container) return;
       if (Array.isArray(arr) && arr.length > 0) arr.forEach(item => container.appendChild(createDemoCard(item)));
       else container.innerHTML = '<p style="color:#999; font-style:italic;">Demos are coming soon...</p>';
     };
+    const more = data.moreCapabilitiesDemos || [];
+    const varying = more.filter(x => (x.operation || '').includes('Varying Length'));
+    const s2s = more.filter(x => (x.operation || '').includes('Speech to Sing'));
+    const vc = more.filter(x => (x.operation || '').includes(' · VC ·') || (x.operation || '').startsWith('ZH · VC') || (x.operation || '').startsWith('EN · VC'));
+    const svc = more.filter(x => (x.operation || '').includes(' · SVC ·') || (x.operation || '').includes('SVC'));
     renderSection(data.speechDemos, 'speech-container');
     renderSection(data.singingDemos, 'singing-container');
+    renderSection(varying, 'more-varying-length-container');
+    renderSection(s2s, 'more-speech2sing-container');
+    renderSection(vc, 'more-vc-container');
+    renderSection(svc, 'more-svc-container');
   }
 
   fetch('src/data.json')

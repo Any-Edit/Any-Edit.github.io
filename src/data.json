@@ -188,8 +188,8 @@
     },
     {
       "operation": "ZH · 🔊 Noisy · Substitution",
-      "originalText": "我不唱生死离<mark>结</mark>的情歌",
-      "targetText": "我不唱生死离<mark>别</mark>的情歌",
+      "originalText": "我不唱<mark>声嘶力竭</mark>的情歌",
+      "targetText": "我不唱<mark>生死离别</mark>的情歌",
       "audioOri": "src/audio/singing/6_ori.wav",
       "audioOurs": "src/audio/singing/6_ours.wav",
       "baselines": [
@@ -211,5 +211,189 @@
       }
     }
   ],
-  "additionalDemos": []
+  "additionalDemos": [],
+  "moreCapabilitiesDemos": [
+    {
+      "id": "cat_hulu",
+      "operation": "EN · Varying Length Editing · Insertion",
+      "originalText": "I have a <mark>cat</mark>, Hulu. Say meow, Hulu.",
+      "targetText": "I have a <mark>pretty cute orange cat</mark>, Hulu. Say meow, Hulu.",
+      "sectionNote": "Listening difficulty: (1) background contains cat purring; (2) the two “Hulu” tokens share spelling but differ in pitch/prosody.",
+      "audioOri": "src/audio/ood/cat_hulu_ori_short.wav",
+      "audioOriLabel": "Original Audio",
+      "audioOurs": "src/audio/ood/cat_hulu_anyedit_seed404_for_trim.wav",
+      "oursLabel": "AnyEdit",
+      "baselines": [
+        {
+          "name": "SSR-Speech",
+          "path": "src/audio/ood/cat_hulu_ssr_speech.wav",
+          "note": "Noise appears just before the final meow / background meow."
+        },
+        {
+          "name": "VoiceCraft",
+          "path": "src/audio/ood/cat_hulu_voicecraft.wav",
+          "note": "Incorrect inference / wrong content."
+        },
+        {
+          "name": "Step-EditX",
+          "path": "src/audio/ood/cat_hulu_step_editx.wav"
+        },
+        {
+          "name": "Vevo2",
+          "path": "src/audio/ood/cat_hulu_vevo2.wav",
+          "note": "Completely failed."
+        },
+        {
+          "name": "Ming-Uni",
+          "path": "src/audio/ood/cat_hulu_ming_uni.wav",
+          "note": "Background does not match the original scene."
+        },
+        {
+          "name": "Mimo-Audio",
+          "path": "src/audio/ood/cat_hulu_mimo.wav",
+          "note": "Background and timbre mismatch; does not keep the original prosody of the two “Hulu” tokens."
+        }
+      ]
+    },
+    {
+      "id": "S2S-EN-01",
+      "uttId": "rlhfv1_expressive_codeSwitching_cosyvoice2_rlhfv1_expressive_002211_prompt.wav_F1-summertime-Musical-正常抒情07",
+      "operation": "EN · Speech to Sing",
+      "originalText": "until that morning There's nothing can harm you",
+      "targetText": "until that morning There's nothing can harm you",
+      "sectionNote": "Speech-to-sing: convert speech timbre onto singing prosody/content.",
+      "audioOri": "src/audio/vcsvc/S2S-EN-01_prosody.wav",
+      "audioOriLabel": "Prosody / Content Reference",
+      "audioTimbre": "src/audio/vcsvc/S2S-EN-01_timbre.wav",
+      "audioTimbreLabel": "Timbre Reference",
+      "audioOurs": "src/audio/vcsvc/S2S-EN-01_ours.wav",
+      "oursLabel": "ANYEDIT (Ours)",
+      "baselines": [
+        {
+          "name": "Vevo2",
+          "path": "src/audio/vcsvc/S2S-EN-01_vevo2.wav"
+        }
+      ]
+    },
+    {
+      "id": "VC-ZH-01",
+      "uttId": "10002854-00000043_10002858-00000038",
+      "operation": "ZH · VC · SeedTTS",
+      "originalText": "拼车将会是解决交通拥堵非常有效的方式。",
+      "targetText": "拼车将会是解决交通拥堵非常有效的方式。",
+      "sectionNote": "Voice conversion: keep content/prosody, transfer target speaker timbre.",
+      "audioOri": "src/audio/vcsvc/VC-ZH-01_prosody.wav",
+      "audioOriLabel": "Prosody / Content Reference",
+      "audioTimbre": "src/audio/vcsvc/VC-ZH-01_timbre.wav",
+      "audioTimbreLabel": "Timbre Reference",
+      "audioOurs": "src/audio/vcsvc/VC-ZH-01_ours.wav",
+      "oursLabel": "ANYEDIT (Ours)",
+      "baselines": [
+        {
+          "name": "Vevo2",
+          "path": "src/audio/vcsvc/VC-ZH-01_vevo2.wav"
+        }
+      ]
+    },
+    {
+      "id": "VC-EN-01",
+      "uttId": "common_voice_en_18754308_common_voice_en_18757805-common_voice_en_18757804",
+      "operation": "EN · VC · SeedTTS",
+      "originalText": "He was a senior fellow at the time of his death in London.",
+      "targetText": "He was a senior fellow at the time of his death in London.",
+      "sectionNote": "Voice conversion: keep content/prosody, transfer target speaker timbre.",
+      "audioOri": "src/audio/vcsvc/VC-EN-01_prosody.wav",
+      "audioOriLabel": "Prosody / Content Reference",
+      "audioTimbre": "src/audio/vcsvc/VC-EN-01_timbre.wav",
+      "audioTimbreLabel": "Timbre Reference",
+      "audioOurs": "src/audio/vcsvc/VC-EN-01_ours.wav",
+      "oursLabel": "ANYEDIT (Ours)",
+      "baselines": [
+        {
+          "name": "Vevo2",
+          "path": "src/audio/vcsvc/VC-EN-01_vevo2.wav"
+        }
+      ]
+    },
+    {
+      "id": "VC-EN-02",
+      "uttId": "common_voice_en_9559_common_voice_en_96260-common_voice_en_96263",
+      "operation": "EN · VC · SeedTTS",
+      "originalText": "He got up early with the idea of finding it.",
+      "targetText": "He got up early with the idea of finding it.",
+      "sectionNote": "Voice conversion: keep content/prosody, transfer target speaker timbre.",
+      "audioOri": "src/audio/vcsvc/VC-EN-02_prosody.wav",
+      "audioOriLabel": "Prosody / Content Reference",
+      "audioTimbre": "src/audio/vcsvc/VC-EN-02_timbre.wav",
+      "audioTimbreLabel": "Timbre Reference",
+      "audioOurs": "src/audio/vcsvc/VC-EN-02_ours.wav",
+      "oursLabel": "ANYEDIT (Ours)",
+      "baselines": [
+        {
+          "name": "Vevo2",
+          "path": "src/audio/vcsvc/VC-EN-02_vevo2.wav"
+        }
+      ]
+    },
+    {
+      "id": "SVC-EN-01",
+      "uttId": "M1-ProudMary-FolkRock-正常29_F1-TheShow-Pop-甜美59",
+      "operation": "EN · SVC · SingStyle111",
+      "originalText": "I'm just a little bit caught in the middle Life is a maze",
+      "targetText": "I'm just a little bit caught in the middle Life is a maze",
+      "sectionNote": "Singing voice conversion: keep singing content/prosody, transfer singer timbre.",
+      "audioOri": "src/audio/vcsvc/SVC-EN-01_prosody.wav",
+      "audioOriLabel": "Prosody / Content Reference",
+      "audioTimbre": "src/audio/vcsvc/SVC-EN-01_timbre.wav",
+      "audioTimbreLabel": "Timbre Reference",
+      "audioOurs": "src/audio/vcsvc/SVC-EN-01_ours.wav",
+      "oursLabel": "ANYEDIT (Ours)",
+      "baselines": [
+        {
+          "name": "Vevo2",
+          "path": "src/audio/vcsvc/SVC-EN-01_vevo2.wav"
+        }
+      ]
+    },
+    {
+      "id": "SVC-ZH-01",
+      "uttId": "M4-想见你-Pop-夸张08_F3-易燃易爆炸-Pop-力量16",
+      "operation": "ZH · SVC · SingStyle111",
+      "originalText": "赐我梦境还赐我很快就清醒与我沉睡",
+      "targetText": "赐我梦境还赐我很快就清醒与我沉睡",
+      "sectionNote": "Singing voice conversion: keep singing content/prosody, transfer singer timbre.",
+      "audioOri": "src/audio/vcsvc/SVC-ZH-01_prosody.wav",
+      "audioOriLabel": "Prosody / Content Reference",
+      "audioTimbre": "src/audio/vcsvc/SVC-ZH-01_timbre.wav",
+      "audioTimbreLabel": "Timbre Reference",
+      "audioOurs": "src/audio/vcsvc/SVC-ZH-01_ours.wav",
+      "oursLabel": "ANYEDIT (Ours)",
+      "baselines": [
+        {
+          "name": "Vevo2",
+          "path": "src/audio/vcsvc/SVC-ZH-01_vevo2.wav"
+        }
+      ]
+    },
+    {
+      "id": "SVC-ZH-02",
+      "uttId": "M2-达尔文-Pop-正常41_F1-甜蜜蜜-jazz-夸张快乐10",
+      "operation": "ZH · SVC · SingStyle111",
+      "originalText": "你的笑容这样熟悉我一时想不起",
+      "targetText": "你的笑容这样熟悉我一时想不起",
+      "sectionNote": "Singing voice conversion: keep singing content/prosody, transfer singer timbre.",
+      "audioOri": "src/audio/vcsvc/SVC-ZH-02_prosody.wav",
+      "audioOriLabel": "Prosody / Content Reference",
+      "audioTimbre": "src/audio/vcsvc/SVC-ZH-02_timbre.wav",
+      "audioTimbreLabel": "Timbre Reference",
+      "audioOurs": "src/audio/vcsvc/SVC-ZH-02_ours.wav",
+      "oursLabel": "ANYEDIT (Ours)",
+      "baselines": [
+        {
+          "name": "Vevo2",
+          "path": "src/audio/vcsvc/SVC-ZH-02_vevo2.wav"
+        }
+      ]
+    }
+  ]
 }
