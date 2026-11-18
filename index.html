@@ -3,7 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ANYEDIT: A Unified Framework for Speech and Singing Voice Editing</title>
+  <title>AnyEdit: A Unified Framework for Speech and Singing Voice Editing with Real-World Environmental Consistency</title>
+  <meta name="description" content="AnyEdit is a unified, separation-free framework for speech and singing voice editing that preserves noise, reverberation, and background music. Explore demo audios, the paper, and AnyEditBench.">
+  <meta name="citation_title" content="AnyEdit: A Unified Framework for Speech and Singing Voice Editing with Real-World Environmental Consistency">
+  <meta name="citation_author" content="Yunjia Zhang">
+  <meta name="citation_author" content="Junan Zhang">
+  <meta name="citation_author" content="Jing Yang">
+  <meta name="citation_author" content="Xueyao Zhang">
+  <meta name="citation_author" content="Fan Fan">
+  <meta name="citation_author" content="Zhizheng Wu">
+  <meta name="citation_publication_date" content="2026/10/11">
+  <meta name="citation_pdf_url" content="https://arxiv.org/pdf/2610.15665">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
     :root {
@@ -75,11 +85,16 @@
     }
     header { text-align: center; margin-bottom: 50px; }
     h1 { font-size: 2.2em; color: #1a1a1a; margin-bottom: 15px; }
+    .publication-venue { margin: 0 0 20px; font-size: 1.1em; color: var(--text-muted); }
     .authors { font-size: 1.1em; color: #444; margin-bottom: 10px; }
+    .authors span { display: inline-block; }
     .authors sup { color: var(--primary); }
     .affiliations { font-size: 0.9em; color: var(--text-muted); margin-bottom: 25px; }
+    .author-notes { margin-top: 10px; font-size: 0.9em; }
+    .author-notes a { color: var(--primary); overflow-wrap: anywhere; }
     .badges a { display: inline-block; margin: 0 4px; text-decoration: none; }
     .badges img { height: 28px; vertical-align: middle; }
+    .citation { background: #fff; padding: 20px; border: 1px solid #eaeaea; border-radius: 12px; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 0.85em; }
     section { margin-bottom: 60px; scroll-margin-top: 40px; }
     h2 {
       border-bottom: 2px solid #eaeaea;
@@ -204,7 +219,7 @@
       <li><a href="#header">Home</a></li>
       <li><a href="#abstract">Abstract</a></li>
       <li><a href="#methodology">Methodology</a></li>
-      <li><a href="#benchmark">ANYEDITBENCH</a></li>
+      <li><a href="#benchmark">AnyEditBench</a></li>
       <li><a href="#speech-demo">🎧 Real-World Speech</a></li>
       <li><a href="#singing-demo">🎧 Real-World Singing</a></li>
       <li><a href="#more-capabilities">🎧 More Capabilities</a></li>
@@ -212,25 +227,40 @@
       <li style="padding-left:14px;"><a href="#more-speech2sing">· Speech to Sing</a></li>
       <li style="padding-left:14px;"><a href="#more-vc">· Voice Conversion (VC)</a></li>
       <li style="padding-left:14px;"><a href="#more-svc">· Singing Voice Conversion (SVC)</a></li>
+      <li><a href="#citation">Citation</a></li>
     </ul>
   </nav>
   <main class="main-content">
     <header id="header" class="fade-in">
-      <h1>ANYEDIT: A Unified Framework for Speech and Singing Voice Editing with Real-World Acoustic Consistency</h1>
+      <h1>AnyEdit: A Unified Framework for Speech and Singing Voice Editing with Real-World Environmental Consistency</h1>
       <div class="authors">
-        Anonymous Authors
+        <span>Yunjia Zhang<sup>1*</sup></span>,
+        <span>Junan Zhang<sup>1*</sup></span>,
+        <span>Jing Yang<sup>2*</sup></span>,
+        <span>Xueyao Zhang<sup>1</sup></span>,
+        <span>Fan Fan<sup>2</sup></span>,
+        <span>Zhizheng Wu<sup>1,3,4†</sup></span>
       </div>
-      <!-- temporarily hidden: ArXiv / HuggingFace badges
+      <div class="affiliations">
+        <div><sup>1</sup> The Chinese University of Hong Kong, Shenzhen</div>
+        <div><sup>2</sup> Institute of Media Technology and Experience Design, Huawei</div>
+        <div><sup>3</sup> City University of Macau</div>
+        <div><sup>4</sup> Amphion Technology Co., Ltd.</div>
+        <div class="author-notes">
+          <div>* Equal contribution. † Corresponding author.</div>
+          <div>E-mail: <a href="mailto:yunjiazhang2@link.cuhk.edu.cn">yunjiazhang2@link.cuhk.edu.cn</a>, <a href="mailto:wuzhizheng@cuhk.edu.cn">wuzhizheng@cuhk.edu.cn</a></div>
+        </div>
+      </div>
+      <p class="publication-venue">NeurIPS 2026</p>
       <div class="badges">
-        <a href="#"><img src="https://img.shields.io/badge/Paper-ArXiv-b31b1b?style=for-the-badge&logo=arxiv" alt="Paper"></a>
-        <a href="#"><img src="https://img.shields.io/badge/Dataset-HuggingFace-ffcc00?style=for-the-badge&logo=huggingface" alt="HuggingFace"></a>
+        <a href="https://arxiv.org/abs/2610.15665" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/Paper-ArXiv-b31b1b?style=for-the-badge&logo=arxiv" alt="Paper on arXiv"></a>
+        <a href="https://huggingface.co/datasets/Ririiiii/anyeditbench" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/Dataset-HuggingFace-ffcc00?style=for-the-badge&logo=huggingface" alt="AnyEditBench on Hugging Face"></a>
       </div>
-      -->
     </header>
     <section id="abstract" class="fade-in">
       <h2>Abstract</h2>
       <div class="abstract-text">
-        We present ANYEDIT, a unified framework for speech and singing voice editing in real-world acoustic environments. Recent unified generative models already achieve strong speech and singing generation in clean conditions, but real-world vocal editing remains challenging because the model must revise content while simultaneously preserving speaker identity, prosody, and the surrounding acoustic scene. A straightforward solution is to directly model noisy edited audio end to end, yet this entangles semantic editing with environmental acoustics and can weaken the core vocal generation capability. We therefore adopt a two-stage design that preserves clean-domain editing ability while deferring acoustic rendering to a separate stage.
+        We present AnyEdit, a unified, separation-free framework for speech and singing voice editing that preserves real-world acoustic environments, including noise, reverberation, and background music. Recent unified generative models already achieve strong speech and singing generation in clean conditions, but real-world vocal editing remains challenging because the model must revise content while simultaneously preserving speaker identity, prosody, and the surrounding acoustic scene. A straightforward solution is to directly model noisy edited audio end to end, yet this entangles semantic editing with environmental acoustics and can weaken the core vocal generation capability. We therefore adopt a two-stage design that preserves clean-domain editing ability while deferring acoustic rendering to a separate stage: an instruction-guided autoregressive editor first predicts clean prosody and content-style tokens, supported by a teacher-student noise-robust prosody tokenizer that distills clean prosodic tokens from degraded recordings; a flow-matching acoustic model then performs in-context rendering conditioned on the source acoustic context, so the edited segment inherits surrounding noise, reverberation, and background sound while maintaining consistent speaker timbre. To stabilize unedited regions, we introduce unmodified-area-aware supervision; after pre-training, we further apply direct preference optimization (DPO) on mined real-to-real singing pairs via Chromagram-DTW. We also release AnyEditBench, a benchmark covering both speech and singing voice editing under clean, simulated, and in-the-wild acoustic conditions. Experiments on Chinese and English speech and singing datasets showed that AnyEdit consistently outperforms strong baselines in content accuracy, subjective quality, and background consistency under noisy and reverberant conditions.
       </div>
     </section>
     <section id="methodology" class="fade-in">
@@ -240,8 +270,8 @@
       <p>The AR model operates in a clean semantic space to predict prosody and content tokens, supported by a noise-robust teacher-student tokenizer. A flow-matching acoustic model then renders mel-spectrograms conditioned on source acoustic context.</p>
     </section>
     <section id="benchmark" class="fade-in">
-      <h2>ANYEDITBENCH</h2>
-      <p>ANYEDITBENCH covers 12 subsets (3 splits × 2 modalities × 2 languages), totaling 600 evaluation items:</p>
+      <h2>AnyEditBench</h2>
+      <p><a href="https://huggingface.co/datasets/Ririiiii/anyeditbench" target="_blank" rel="noopener noreferrer">AnyEditBench is available on Hugging Face.</a> It covers 12 subsets (3 acoustic conditions × 2 modalities × 2 languages), with 50 samples per subset and 600 evaluation items in total. Both speech and singing are covered in English and Chinese:</p>
       <ul>
         <li><strong>Clean:</strong> single-span and multi-span edits on clean recordings.</li>
         <li><strong>Simulated:</strong> diverse noise and reverberation settings.</li>
@@ -277,6 +307,18 @@
       <h3 id="more-svc" style="margin-top:28px;">Singing Voice Conversion (SVC)</h3>
       <p>Keep singing content/prosody while converting to a target singer timbre.</p>
       <div id="more-svc-container"></div>
+    </section>
+    <section id="citation" class="fade-in">
+      <h2>Citation</h2>
+      <pre class="citation"><code>@misc{zhang2026anyeditunifiedframeworkspeech,
+  title={AnyEdit: A Unified Framework for Speech and Singing Voice Editing with Real-World Environmental Consistency},
+  author={Yunjia Zhang and Junan Zhang and Jing Yang and Xueyao Zhang and Fan Fan and Zhizheng Wu},
+  year={2026},
+  eprint={2610.15665},
+  archivePrefix={arXiv},
+  primaryClass={cs.SD},
+  url={https://arxiv.org/abs/2610.15665}
+}</code></pre>
     </section>
   </main>
 </div>
